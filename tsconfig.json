@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"baseUrl": "",
+		"declaration": false,
+		"lib": [
+			"es2016"
+		],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"outDir": "./build/tsc",
+		"target": "es2015",
+		"typeRoots": [
+			"node_modules/@types"
+		]
+	}
+}

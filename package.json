@@ -1,0 +1,31 @@
+{
+	"name": "no-skipped-tests",
+	"description": "WORK IN PROGRESS",
+	"version": "0.0.0",
+	"author": {
+		"name": "Dominique Müller",
+		"email": "dominique.m.mueller@gmail.com",
+		"url": "https://www.devdom.io/"
+	},
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dominique-mueller/no-skipped-tests.git"
+	},
+	"homepage": "https://github.com/dominique-mueller/no-skipped-tests",
+	"bugs": {
+		"url": "https://github.com/dominique-mueller/no-skipped-tests/issues"
+	},
+	"dependencies": {
+		"chalk": "2.1.x",
+		"figures": "2.0.x",
+		"glob": "7.1.x"
+	},
+	"peerDependencies": {
+		"typescript": ">= 2.4.0"
+	},
+	"devDependencies": {
+		"@types/node": "8.0.x",
+		"typescript": "2.4.x"
+	}
+}
