@@ -120,14 +120,17 @@ export function processResults( errors: any ) {
 	let numberOfErrors: number = 0;
 	errors.forEach( ( error ) => {
 
+		const filePathSegments: Array<string> = error.file.split( '/' );
+		const fileName: string = filePathSegments.pop();
+		const filePath: string = `${ filePathSegments.join( '/' ) }/`;
 		if ( error.errors.length === 0 ) {
-			console.log( chalk.green( '  PASS ' ), error.file );
+			console.log( chalk.white.bgGreen( ' PASS ' ), `${ chalk.gray( filePath ) }${ chalk.white( fileName ) }` );
 		} else {
 			console.log( '' );
-			console.log( chalk.red( '  FAIL ' ), error.file );
+			console.log( chalk.white.bgRed( ' FAIL ' ), `${ chalk.gray( filePath ) }${ chalk.white( fileName ) }` );
 			error.errors.forEach( ( errorDetails ) => {
 				numberOfErrors++;
-				console.log( chalk.red( `          ${ figures.pointer } Found "${ errorDetails.identifier }" in line ${ errorDetails.line }` ) );
+				console.log( chalk.red( `       ${ figures.pointer } Found "${ errorDetails.identifier }" in line ${ errorDetails.line }:${ errorDetails.char }` ) );
 			} );
 			console.log( '' );
 		}
@@ -137,11 +140,11 @@ export function processResults( errors: any ) {
 	console.log( '' );
 
 	if ( numberOfErrors === 0 ) {
-		console.log( chalk.green( 'Summary: Everything is fine!' ) );
+		console.log( 'Summary: Everything is fine!' );
 		console.log( '' );
 		process.exit( 0 );
 	} else {
-		console.log( chalk.red( `Summary: Detected ${ numberOfErrors } errors!` ) );
+		console.log( `Summary: Detected ${ numberOfErrors } errors!` );
 		console.log( '' );
 		process.exit( 1 );
 	}
@@ -151,7 +154,7 @@ export function processResults( errors: any ) {
 glob( '**/*.spec.ts', ( error, files ) => {
 
 	console.log( '' );
-	console.log( chalk.underline( 'Checking for skipped tests ...' ) );
+	console.log( 'Checking for skipped tests ...' );
 
 	// TODO: Catch errors
 	// TODO: Catch 0 files
