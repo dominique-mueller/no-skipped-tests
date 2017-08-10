@@ -53,7 +53,7 @@ export class NoSkippedTestsAnalyzer {
 	 * @param {string} filePath - Relative path of the file to be checked / analyzed
 	 */
 	constructor( filePath: string ) {
-		this.filePath = filePath; // TODO: Check? File ending?
+		this.filePath = filePath;
 		this.currentASTDepth = 0;
 		this.currentASTDepthToSkip = -1;
 		this.nodesWithForbiddenIdentifier = [];
@@ -161,9 +161,7 @@ export class NoSkippedTestsAnalyzer {
 					return;
 				}
 
-				// setTimeout( () => { // TODO: Remove me
 				resolve( data );
-				// }, Math.floor( Math.random() * 1000 ) + 0 );
 
 			} );
 

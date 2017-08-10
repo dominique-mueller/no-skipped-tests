@@ -1,11 +1,8 @@
 import * as chalk from 'chalk';
 import * as glob from 'glob';
-import * as figures from 'figures';
 import * as ora from 'ora';
 
 import { NoSkippedTestsAnalyzer } from './src/no-skipped-tests-analyzer';
-
-
 
 export function getFilesToAnalyze( pattern: string ): Promise<Array<string>> {
 	return new Promise<Array<string>>( ( resolve: ( files: Array<string> ) => void, reject: () => void ) => {
@@ -29,8 +26,8 @@ async function run() {
 	console.log( '' );
 	const log = ora( 'Searching files' ).start();
 
-	// const files: Array<string> = await getFilesToAnalyze( '**/*.spec.ts' );
-	const files: Array<string> = await getFilesToAnalyze( 'example/hello.spec.ts' );
+	const files: Array<string> = await getFilesToAnalyze( '**/*.spec.ts' );
+	// const files: Array<string> = await getFilesToAnalyze( 'example/hello.spec.ts' );
 
 	if ( files.length === 0 ) {
 		// TODO: Handle 0 files
@@ -91,26 +88,6 @@ async function run() {
 		process.exit( 1 );
 
 	}
-
-	// errors.forEach( ( error ) => {
-
-	// 	const filePathSegments: Array<string> = error.file.split( '/' );
-	// 	const fileName: string = filePathSegments.pop();
-	// 	const filePath: string = `${ filePathSegments.join( '/' ) }/`;
-	// 	if ( error.errors.length === 0 ) {
-	// 		console.log( chalk.white.bgGreen( ' PASS ' ), `${ chalk.gray( filePath ) }${ chalk.white( fileName ) }` );
-	// 	} else {
-	// 		console.log( '' );
-	// 		console.log( chalk.white.bgRed( ' FAIL ' ), `${ chalk.gray( filePath ) }${ chalk.white( fileName ) }` );
-	// 		error.errors.forEach( ( errorDetails ) => {
-	// 			numberOfErrors++;
-	// 			console.log( chalk.red( `       ${ figures.pointer } Found "${ errorDetails.identifier }" in line ${ errorDetails.line }:${ errorDetails.char }` ) );
-	// 		} );
-	// 		console.log( '' );
-	// 	}
-
-	// // } );
-
 
 }
 
