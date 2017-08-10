@@ -1,5 +1,5 @@
 
-describe( () => {
+fdescribe( () => {
 
 	beforeEach( () => {
 		console.log( 'TEST TEST TEST' );

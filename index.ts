@@ -1,175 +1,117 @@
-import { readFileSync, readFile } from 'fs';
-
-import { createSourceFile, forEachChild, Node, ScriptTarget, SourceFile, SyntaxKind } from 'typescript';
 import * as chalk from 'chalk';
 import * as glob from 'glob';
 import * as figures from 'figures';
+import * as ora from 'ora';
 
-// TODO: Verbose output
+import { NoSkippedTestsAnalyzer } from './src/no-skipped-tests-analyzer';
 
-const forbiddenIdentifiers: Array<string> = [
-	'fdescribe',
-	'xdescribe',
-	'fit',
-	'xit'
-];
-const skipIdentifiers: Array<string> = [
-	'it',
-	'fit',
-	'xit'
-];
 
-// TODO: Wrap the following in a function
 
-export class NoSkippedTestsAnalyzer {
+export function getFilesToAnalyze( pattern: string ): Promise<Array<string>> {
+	return new Promise<Array<string>>( ( resolve: ( files: Array<string> ) => void, reject: () => void ) => {
 
-	private filePath: string;
-	private currentDepth: number;
-	private currentDepthToSkipTheRestOf: number;
-	private errorNodes: Array<Node>;
+		glob( pattern, ( error, files: Array<string> ) => {
 
-	constructor( filePath: string ) {
-		this.currentDepth = 0;
-		this.currentDepthToSkipTheRestOf = -1;
-		this.errorNodes = [];
-		this.filePath = filePath;
-	}
-
-	public analyze(): Promise<any> {
-		return new Promise<any>( ( resolve, reject ) => {
-
-			readFile( this.filePath, { encoding: 'UTF-8' }, ( error, fileContent ) => {
-
+			if ( error ) {
 				// TODO: Handle error
-				// console.log( error );
+				return;
+			}
 
-				// Read file as source file, then start analysis
-				const sourceFile: SourceFile = createSourceFile( this.filePath, fileContent, ScriptTarget.Latest, true );
-				this.analyzeNodesRecursively( sourceFile );
-
-				const errors: Array<any> = [];
-				this.errorNodes.forEach( ( node ) => {
-					const { line, character } = sourceFile.getLineAndCharacterOfPosition( node.getStart() );
-					errors.push( {
-						identifier: node.getText(),
-						line: line + 1,
-						char: character
-					} );
-				} );
-
-				resolve( {
-					file: this.filePath,
-					errors
-				} );
-
-			} );
+			resolve( files );
 
 		} );
+
+	} );
+}
+
+async function run() {
+
+	console.log( '' );
+	const log = ora( 'Searching files' ).start();
+
+	// const files: Array<string> = await getFilesToAnalyze( '**/*.spec.ts' );
+	const files: Array<string> = await getFilesToAnalyze( 'example/hello.spec.ts' );
+
+	if ( files.length === 0 ) {
+		// TODO: Handle 0 files
+		return;
 	}
 
-	private analyzeNodesRecursively( currentNode: Node ) {
+	log.text = 'Analyzing files for skipped tests [0%]';
 
-		// One depth down
-		this.currentDepth = this.currentDepth + 1;
+	// Analyze all files (asynchronously, #perfmatters)
+	const analysisPromises: Array<Promise<any>> = [];
+	const numberOfFiles: number = files.length;
+	let finished: number = 0;
+	files.forEach( ( filePath: string ) => {
+		const noSkippedTestsAnalyzer: NoSkippedTestsAnalyzer = new NoSkippedTestsAnalyzer( filePath );
+		const promise: any = noSkippedTestsAnalyzer.analyze();
+		promise.then( () => {
+			finished++;
+			log.text = `Analyzing files for skipped tests [${ Math.round( ( finished / numberOfFiles ) * 100 ) }%]`;
+		} );
+		analysisPromises.push( promise );
+	} );
 
-		// Reset the depth skip value if we've left the the corresponding depth level (upwards)
-		if ( this.currentDepth === this.currentDepthToSkipTheRestOf - 1 ) {
-			this.currentDepthToSkipTheRestOf = -1;
-		}
+	const results: any = await Promise.all( analysisPromises );
+	const numberOfErrors: number = results.reduce( ( accumulator: number, currentValue: any ) => {
+		return accumulator + ( <Array<any>> currentValue.errors ).length;
+	}, 0 );
 
-		// Exit early if we want to skip the rest of this depth (##perfmatters)
-		if ( this.currentDepth === this.currentDepthToSkipTheRestOf ) {
-			this.currentDepth--;
-			return;
-		}
+	log.stop();
 
-		// Analyze function / identifier names only
-		if ( currentNode.kind === SyntaxKind.Identifier ) {
+	if ( numberOfErrors === 0 ) {
 
-			// Check if the function name is in the list of forbidden ones
-			const identifierName: string = currentNode.getText();
-			if ( forbiddenIdentifiers.indexOf( identifierName ) !== -1 ) {
+		console.log( chalk.white.bgGreen( ' OK ' ), 'Everything is fine, all tests are active!' );
+		console.log( '' );
+		process.exit( 0 );
 
-				this.errorNodes.push( currentNode );
+	} else {
 
-				// Check if we can skip the rest of this depth level (and all its children) (#perfmatters)
-				if ( skipIdentifiers.indexOf( identifierName ) !== -1 ) {
-					this.currentDepthToSkipTheRestOf = this.currentDepth;
-				}
+		console.log( chalk.white.bgRed( ' ERROR ' ), `We have discovered that not all tests are active (${ numberOfErrors } issues found)!` );
+		console.log( '' );
+
+		results.forEach( ( fileResult: any ) => {
+
+			const numberOfFileErrors: number = fileResult.errors.length;
+			if ( numberOfFileErrors !== 0 ) {
+
+				fileResult.errors.forEach( ( error: any ) => {
+					console.log(
+						chalk.red( `        ${ fileResult.filePath } (${ error.line }:${ error.char }):` ),
+						chalk.white( `Found usage of "${ error.identifier }".` )
+					);
+				} );
 
 			}
 
-		}
-
-		// Early exit analyzing this AST depth if we've found a test case identifier (which cannot be nested)
-		if ( this.currentDepthToSkipTheRestOf !== this.currentDepth ) {
-			forEachChild( currentNode, this.analyzeNodesRecursively.bind( this ) ); // Recursion
-		}
-
-		// One depth up again
-		this.currentDepth--;
-
-	}
-
-}
-
-export function processResults( errors: any ) {
-
-	console.log( '' );
-
-	let numberOfErrors: number = 0;
-	errors.forEach( ( error ) => {
-
-		const filePathSegments: Array<string> = error.file.split( '/' );
-		const fileName: string = filePathSegments.pop();
-		const filePath: string = `${ filePathSegments.join( '/' ) }/`;
-		if ( error.errors.length === 0 ) {
-			console.log( chalk.white.bgGreen( ' PASS ' ), `${ chalk.gray( filePath ) }${ chalk.white( fileName ) }` );
-		} else {
-			console.log( '' );
-			console.log( chalk.white.bgRed( ' FAIL ' ), `${ chalk.gray( filePath ) }${ chalk.white( fileName ) }` );
-			error.errors.forEach( ( errorDetails ) => {
-				numberOfErrors++;
-				console.log( chalk.red( `       ${ figures.pointer } Found "${ errorDetails.identifier }" in line ${ errorDetails.line }:${ errorDetails.char }` ) );
-			} );
-			console.log( '' );
-		}
-
-	} );
-
-	console.log( '' );
-
-	if ( numberOfErrors === 0 ) {
-		console.log( 'Summary: Everything is fine!' );
-		console.log( '' );
-		process.exit( 0 );
-	} else {
-		console.log( `Summary: Detected ${ numberOfErrors } errors!` );
-		console.log( '' );
-		process.exit( 1 );
-	}
-
-}
-
-glob( '**/*.spec.ts', ( error, files ) => {
-
-	console.log( '' );
-	console.log( 'Checking for skipped tests ...' );
-
-	// TODO: Catch errors
-	// TODO: Catch 0 files
-
-	// Analyze all files (asynchronously, #perfmatters)
-	const promises: Array<Promise<any>> = [];
-	files.forEach( ( filePath: string ) => {
-		const analyzer: NoSkippedTestsAnalyzer = new NoSkippedTestsAnalyzer( filePath );
-		promises.push( analyzer.analyze() );
-	} );
-
-	Promise
-		.all( promises )
-		.then( ( errors: Array<any> ) => {
-			processResults( errors );
 		} );
 
-} );
+		console.log( '' );
+		process.exit( 1 );
+
+	}
+
+	// errors.forEach( ( error ) => {
+
+	// 	const filePathSegments: Array<string> = error.file.split( '/' );
+	// 	const fileName: string = filePathSegments.pop();
+	// 	const filePath: string = `${ filePathSegments.join( '/' ) }/`;
+	// 	if ( error.errors.length === 0 ) {
+	// 		console.log( chalk.white.bgGreen( ' PASS ' ), `${ chalk.gray( filePath ) }${ chalk.white( fileName ) }` );
+	// 	} else {
+	// 		console.log( '' );
+	// 		console.log( chalk.white.bgRed( ' FAIL ' ), `${ chalk.gray( filePath ) }${ chalk.white( fileName ) }` );
+	// 		error.errors.forEach( ( errorDetails ) => {
+	// 			numberOfErrors++;
+	// 			console.log( chalk.red( `       ${ figures.pointer } Found "${ errorDetails.identifier }" in line ${ errorDetails.line }:${ errorDetails.char }` ) );
+	// 		} );
+	// 		console.log( '' );
+	// 	}
+
+	// // } );
+
+
+}
+
+run();
