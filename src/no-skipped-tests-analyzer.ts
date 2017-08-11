@@ -16,6 +16,8 @@ export const lastInterestingIdentifiers: Array<string> = [
 	'xit'
 ];
 
+// TODO: Define interfaces
+
 /**
  * No Skipped Tests Analyzer
  *

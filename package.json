@@ -16,6 +16,10 @@
 	"bugs": {
 		"url": "https://github.com/dominique-mueller/no-skipped-tests/issues"
 	},
+	"scripts": {
+		"compile": "tsc -p tsconfig.json",
+		"start": "node dist/index.js"
+	},
 	"dependencies": {
 		"chalk": "2.1.x",
 		"glob": "7.1.x",
