@@ -67,31 +67,43 @@ export class NoSkippedTestsAnalyzer {
 	 * @returns {Promise<any>} - Promise, resolved with the results
 	 */
 	public analyze(): Promise<any> {
-		return new Promise<any>( async( resolve: ( result: any ) => void, reject: () => void ) => {
+		return new Promise<any>( async( resolve: ( result: any ) => void, reject: ( error: Error ) => void ) => {
 
-			// Read file as source file, then start analysis
-			const data: any = await this.readFile();
-			const fileName: string = path.basename( this.filePath );
-			const fileDirectory: string = path.dirname( this.filePath );
-			const sourceFile: typescript.SourceFile = typescript.createSourceFile( fileName, data, typescript.ScriptTarget.Latest, true );
+			// Read file (and catch errors)
+			let data: any;
+			try {
+				data = await this.readFile();
+			} catch( error ) {
+				reject( error );
+				return;
+			};
+
+			// Create source file
+			let sourceFile: typescript.SourceFile
+			try {
+				sourceFile = typescript.createSourceFile( path.basename( this.filePath ), data, typescript.ScriptTarget.Latest, true );
+			} catch ( error ) {
+				reject( error );
+				return;
+			}
+
+			// Run analysis
 			this.analyzeNodeAndChildrenForErrors( sourceFile );
 
 			// Enhance error result
 			const errors: Array<any> = [];
-			this.nodesWithForbiddenIdentifier.forEach( ( node ) => {
+			this.nodesWithForbiddenIdentifier.forEach( ( node: typescript.Node ) => {
 				const lineAndCharacter: typescript.LineAndCharacter = sourceFile.getLineAndCharacterOfPosition( node.getStart() );
 				errors.push( {
 					char: lineAndCharacter.character,
 					identifier: node.getText(),
-					line: lineAndCharacter.line++
+					line: lineAndCharacter.line + 1
 				} );
 			} );
 
 			// Return analysis result
 			resolve( {
 				filePath: this.filePath,
-				fileName,
-				fileDirectory,
 				errors
 			} );
 
@@ -154,12 +166,13 @@ export class NoSkippedTestsAnalyzer {
 	 * @returns {Promise<any>} - Promise, resolved with the file content
 	 */
 	private readFile(): Promise<any> {
-		return new Promise<any>( ( resolve: ( data: any ) => void, reject: () => void ) => {
+		return new Promise<any>( ( resolve: ( data: any ) => void, reject: ( error: Error ) => void ) => {
 
 			fs.readFile( this.filePath, { encoding: 'UTF-8' }, ( error: NodeJS.ErrnoException, data: any ) => {
 
+				// Handle errors
 				if ( error ) {
-					// TODO: Handle error
+					reject( error );
 					return;
 				}
 
