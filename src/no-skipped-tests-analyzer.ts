@@ -3,20 +3,9 @@ import * as path from 'path';
 
 import * as typescript from 'typescript';
 
-// TODO: Check frameworks!!
-export const forbiddenIdentifiers: Array<string> = [
-	'fdescribe',
-	'xdescribe',
-	'fit',
-	'xit'
-];
-export const lastInterestingIdentifiers: Array<string> = [
-	'it',
-	'fit',
-	'xit'
-];
-
-// TODO: Define interfaces
+import { deepestIdentifiers, forbiddenIdentifiers } from './constants/identifiers';
+import { NoSkippedTestsAnalyzerError } from './interfaces/no-skipped-tests-analyzer-error.interface';
+import { NoSkippedTestsAnalyzerResult } from './interfaces/no-skipped-tests-analyzer-result.interface';
 
 /**
  * No Skipped Tests Analyzer
@@ -64,10 +53,11 @@ export class NoSkippedTestsAnalyzer {
 	/**
 	 * Analyze for focused / ignored tests
 	 *
-	 * @returns {Promise<any>} - Promise, resolved with the results
+	 * @returns {Promise<NoSkippedTestsAnalyzerResult>} - Promise, resolves with the results
 	 */
-	public analyze(): Promise<any> {
-		return new Promise<any>( async( resolve: ( result: any ) => void, reject: ( error: Error ) => void ) => {
+	public analyze(): Promise<NoSkippedTestsAnalyzerResult> {
+		return new Promise<NoSkippedTestsAnalyzerResult>(
+			async( resolve: ( result: NoSkippedTestsAnalyzerResult ) => void, reject: ( error: Error ) => void ) => {
 
 			// Read file (and catch errors)
 			let data: any;
@@ -79,7 +69,7 @@ export class NoSkippedTestsAnalyzer {
 			};
 
 			// Create source file
-			let sourceFile: typescript.SourceFile
+			let sourceFile: typescript.SourceFile;
 			try {
 				sourceFile = typescript.createSourceFile( path.basename( this.filePath ), data, typescript.ScriptTarget.Latest, true );
 			} catch ( error ) {
@@ -91,7 +81,7 @@ export class NoSkippedTestsAnalyzer {
 			this.analyzeNodeAndChildrenForErrors( sourceFile );
 
 			// Enhance error result
-			const errors: Array<any> = [];
+			const errors: Array<NoSkippedTestsAnalyzerError> = [];
 			this.nodesWithForbiddenIdentifier.forEach( ( node: typescript.Node ) => {
 				const lineAndCharacter: typescript.LineAndCharacter = sourceFile.getLineAndCharacterOfPosition( node.getStart() );
 				errors.push( {
@@ -142,7 +132,7 @@ export class NoSkippedTestsAnalyzer {
 				this.nodesWithForbiddenIdentifier.push( currentNode );
 
 				// Check if we can skip the rest of this depth level (and all its children) (#perfmatters)
-				if ( lastInterestingIdentifiers.indexOf( identifierName ) !== -1 ) {
+				if ( deepestIdentifiers.indexOf( identifierName ) !== -1 ) {
 					this.currentASTDepthToSkip = this.currentASTDepth;
 				}
 
@@ -168,7 +158,7 @@ export class NoSkippedTestsAnalyzer {
 	private readFile(): Promise<any> {
 		return new Promise<any>( ( resolve: ( data: any ) => void, reject: ( error: Error ) => void ) => {
 
-			fs.readFile( this.filePath, { encoding: 'UTF-8' }, ( error: NodeJS.ErrnoException, data: any ) => {
+			fs.readFile( this.filePath, { encoding: 'UTF-8' }, ( error: Error, data: any ) => {
 
 				// Handle errors
 				if ( error ) {
