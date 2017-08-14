@@ -18,7 +18,7 @@
 	},
 	"scripts": {
 		"compile": "tsc -p tsconfig.json",
-		"start": "node dist/index.js"
+		"start": "node bin/no-skipped-tests.js example/*.spec.ts"
 	},
 	"dependencies": {
 		"chalk": "2.1.x",

@@ -3,4 +3,5 @@
  */
 export interface NoSkippedTestsOptions {
 	pattern?: string;
+	log?: boolean;
 }
