@@ -9,38 +9,48 @@ import { NoSkippedTestsAnalyzerError } from './interfaces/no-skipped-tests-analy
 import { NoSkippedTestsAnalyzerResult } from './interfaces/no-skipped-tests-analyzer-result.interface';
 
 /**
- * Main process
+ * Analyze files for skipped tests
  *
  * @param   [options={}] - Options, default options as fallback
- * @returns              - Promise, resolves when done
+ * @returns              - Promise, resolves when done with the analysis results for all files matching the given pattern
  */
-export function main( options: NoSkippedTestsOptions = {} ): Promise<void> {
-	return new Promise<void>( async( resolve: () => void, reject: ( error?: Error ) => void ) => {
+export function analyzeFilesForSkippedTests( options: NoSkippedTestsOptions = {} ): Promise<Array<NoSkippedTestsAnalyzerResult>> {
+	return new Promise<Array<NoSkippedTestsAnalyzerResult>>(
+		async( resolve: ( results: Array<NoSkippedTestsAnalyzerResult> ) => void, reject: ( error?: Error ) => void ) => {
 
 		// Get options
 		const mergedOptions: NoSkippedTestsOptions = Object.assign( defaultOptions, options );
 
 		// Get list of files (relative file paths, to be specific) matching the given pattern
-		const log = ora( 'Searching files' ).start();
+		let log: any;
+		if ( mergedOptions.log ) {
+			log = ora( 'Searching files' ).start();
+		}
 		let files: Array<string>;
 		try {
-			files = await getFilesByPattern( '**/*.spec.ts' );
+			files = await getFilesByPattern( mergedOptions.pattern );
 		} catch ( error ) {
-			log.stop();
+			if ( mergedOptions.log ) {
+				log.stop();
+			}
 			reject( error );
 			return;
 		}
 
 		// Exit early if no files are found
 		if ( files.length === 0 ) {
-			log.stop();
-			console.warn( chalk.white.bgYellow( ' WARNING ' ), `No files found using the given pattern ("${ options.pattern }").` );
-			resolve();
+			if ( mergedOptions.log ) {
+				log.stop();
+				console.warn( chalk.white.bgYellow( ' WARNING ' ), `No files found using the given pattern ("${ mergedOptions.pattern }").` );
+			}
+			resolve( [] );
 			return;
 		}
 
 		// Analyze all files (asynchronously, #perfmatters)
-		log.text = 'Analyzing files for skipped tests [0%]';
+		if ( mergedOptions.log ) {
+			log.text = 'Analyzing files for skipped tests [0%]';
+		}
 		const analysisPromises: Array<Promise<any>> = [];
 		const numberOfFiles: number = files.length;
 		let finished: number = 0;
@@ -49,11 +59,15 @@ export function main( options: NoSkippedTestsOptions = {} ): Promise<void> {
 			const promise: Promise<NoSkippedTestsAnalyzerResult> = noSkippedTestsAnalyzer.analyze();
 			promise
 				.then( () => {
-					finished++;
-					log.text = `Analyzing files for skipped tests [${ Math.round( ( finished / numberOfFiles ) * 100 ) }%]`;
+					if ( mergedOptions.log ) {
+						finished++;
+						log.text = `Analyzing files for skipped tests [${ Math.round( ( finished / numberOfFiles ) * 100 ) }%]`;
+					}
 				} )
 				.catch( ( error: Error ) => {
-					log.stop();
+					if ( mergedOptions.log ) {
+						log.stop();
+					}
 					reject( error );
 					return;
 				} );
@@ -62,38 +76,42 @@ export function main( options: NoSkippedTestsOptions = {} ): Promise<void> {
 
 		// Collect the results
 		let results: Array<NoSkippedTestsAnalyzerResult> = await Promise.all( analysisPromises );
-		const numberOfErrors: number = results.reduce( ( accumulatedValue: number, currentValue: NoSkippedTestsAnalyzerResult ) => {
-			return accumulatedValue + currentValue.errors.length;
-		}, 0 );
 
-		// Log results (success or error)
-		log.stop();
-		if ( numberOfErrors === 0 ) {
+		if ( mergedOptions.log ) {
 
-			console.log( chalk.white.bgGreen( ' OK ' ), 'Everything is fine, all tests are active.' );
-			resolve();
+			const numberOfErrors: number = results.reduce( ( accumulatedValue: number, currentValue: NoSkippedTestsAnalyzerResult ) => {
+				return accumulatedValue + currentValue.errors.length;
+			}, 0 );
 
-		} else {
+			// Log results (success or error)
+			log.stop();
+			if ( numberOfErrors === 0 ) {
 
-			console.log( chalk.white.bgRed( ' ERROR ' ), `Seems that not all tests are active (${ numberOfErrors } issues found).` );
-			console.log( '' );
+				console.log( chalk.white.bgGreen( ' OK ' ), 'Everything is fine, all tests are active.' );
 
-			// Show errors for the same file beneath each other
-			results.forEach( ( fileResult: NoSkippedTestsAnalyzerResult ) => {
-				const numberOfFileErrors: number = fileResult.errors.length;
-				if ( numberOfFileErrors !== 0 ) {
-					fileResult.errors.forEach( ( error: NoSkippedTestsAnalyzerError ) => {
-						console.log(
-							chalk.red( `        ${ fileResult.filePath } (${ error.line }:${ error.char }):` ),
-							chalk.white( `Found "${ error.identifier }"` )
-						);
-					} );
-				}
-			} );
+			} else {
 
-			reject();
+				console.log( chalk.white.bgRed( ' ERROR ' ), `Seems that not all tests are active (${ numberOfErrors } issues found).` );
+				console.log( '' );
+
+				// Show errors for the same file beneath each other
+				results.forEach( ( fileResult: NoSkippedTestsAnalyzerResult ) => {
+					const numberOfFileErrors: number = fileResult.errors.length;
+					if ( numberOfFileErrors !== 0 ) {
+						fileResult.errors.forEach( ( error: NoSkippedTestsAnalyzerError ) => {
+							console.log(
+								chalk.red( `        ${ fileResult.filePath } (${ error.line }:${ error.char }):` ),
+								chalk.white( `Found "${ error.identifier }"` )
+							);
+						} );
+					}
+				} );
+
+			}
 
 		}
+
+		resolve( results );
 
 	} );
 }
