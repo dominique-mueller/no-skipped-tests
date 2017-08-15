@@ -18,7 +18,8 @@
 	},
 	"scripts": {
 		"compile": "tsc -p tsconfig.json",
-		"start": "node bin/no-skipped-tests.js example/*.spec.ts"
+		"start": "node bin/no-skipped-tests.js example/*.spec.ts",
+		"test": "jasmine-ts test/test.spec.ts"
 	},
 	"dependencies": {
 		"chalk": "2.1.x",
@@ -29,7 +30,9 @@
 		"typescript": ">= 2.4.0"
 	},
 	"devDependencies": {
+		"@types/jasmine": "2.5.x",
 		"@types/node": "8.0.x",
+		"jasmine-ts": "0.2.x",
 		"typescript": "2.4.x"
 	}
 }
