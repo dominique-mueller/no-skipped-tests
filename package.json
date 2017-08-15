@@ -19,7 +19,7 @@
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
 		"start": "node bin/no-skipped-tests.js",
-		"test": "nyc --reporter text --reporter html --extension .ts --exclude spec/**/* --cache false jasmine-ts"
+		"test": "nyc --reporter text --reporter html --extension .ts --exclude \"spec/**/*\" --cache false jasmine-ts"
 	},
 	"dependencies": {
 		"chalk": "2.1.x",
