@@ -17,8 +17,9 @@
 		"url": "https://github.com/dominique-mueller/no-skipped-tests/issues"
 	},
 	"scripts": {
-		"compile": "tsc -p tsconfig.json",
-		"start": "node bin/no-skipped-tests.js example/*.spec.ts"
+		"build": "tsc -p tsconfig.json",
+		"start": "node bin/no-skipped-tests.js",
+		"test": "jest --config jest.config.json --runInBand --no-cache"
 	},
 	"dependencies": {
 		"chalk": "2.1.x",
@@ -29,7 +30,10 @@
 		"typescript": ">= 2.4.0"
 	},
 	"devDependencies": {
+		"@types/jest": "20.0.x",
 		"@types/node": "8.0.x",
+		"jest": "20.0.x",
+		"ts-jest": "20.0.x",
 		"typescript": "2.4.x"
 	}
 }

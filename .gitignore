@@ -1,5 +1,6 @@
 # Dependencies
 node_modules
 
-# Build
+# Build & Coverage
 dist
+coverage

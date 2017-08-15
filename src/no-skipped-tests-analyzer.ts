@@ -85,7 +85,7 @@ export class NoSkippedTestsAnalyzer {
 			this.nodesWithForbiddenIdentifier.forEach( ( node: typescript.Node ) => {
 				const lineAndCharacter: typescript.LineAndCharacter = sourceFile.getLineAndCharacterOfPosition( node.getStart() );
 				errors.push( {
-					char: lineAndCharacter.character,
+					char: lineAndCharacter.character + 1,
 					identifier: node.getText(),
 					line: lineAndCharacter.line + 1
 				} );

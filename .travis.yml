@@ -1,0 +1,20 @@
+dist: trusty # Beta build environment (newer OS, at least it seems)
+sudo: false # Container instead of VM (thus, a lot faster)
+language: node_js
+cache:
+  directories:
+    - node_modules
+notifications:
+  email: false
+branches:
+  only:
+    - master # Testing, Building, Releasing
+    - develop # Testing, Building
+    - feature/travis # Branch specifically for testing Travis CI
+
+install:
+  - npm install
+
+script:
+  - npm run build
+  - npm run test
