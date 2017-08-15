@@ -2,21 +2,21 @@ import { analyzeFilesForSkippedTests } from './../index';
 
 describe( 'No Skipped Tests Analyzer', () => {
 
-	it( 'should not find any errors [TypeScript]', ( done ) => {
+	it( 'should not find any errors (TS)', ( done ) => {
 
 		analyzeFilesForSkippedTests( {
 			log: false,
-			pattern: 'test/examples/no-errors/*.spec.ts'
+			pattern: 'spec/examples/no-errors/*.spec.ts'
 		} ).then( ( results ) => {
 
 			expect( results ).toEqual( [
 				{
 					errors: [],
-					filePath: 'test/examples/no-errors/one.spec.ts'
+					filePath: 'spec/examples/no-errors/one.spec.ts'
 				},
 				{
 					errors: [],
-					filePath: 'test/examples/no-errors/two.spec.ts'
+					filePath: 'spec/examples/no-errors/two.spec.ts'
 				}
 			] );
 			done();
@@ -25,21 +25,21 @@ describe( 'No Skipped Tests Analyzer', () => {
 
 	} );
 
-	it( 'should not find any errors [JavaScript]', ( done ) => {
+	it( 'should not find any errors (JS)', ( done ) => {
 
 		analyzeFilesForSkippedTests( {
 			log: false,
-			pattern: 'test/examples/no-errors/*.spec.js'
+			pattern: 'spec/examples/no-errors/*.spec.js'
 		} ).then( ( results ) => {
 
 			expect( results ).toEqual( [
 				{
 					errors: [],
-					filePath: 'test/examples/no-errors/one.spec.js'
+					filePath: 'spec/examples/no-errors/one.spec.js'
 				},
 				{
 					errors: [],
-					filePath: 'test/examples/no-errors/two.spec.js'
+					filePath: 'spec/examples/no-errors/two.spec.js'
 				}
 			] );
 			done();
@@ -48,11 +48,11 @@ describe( 'No Skipped Tests Analyzer', () => {
 
 	} );
 
-	it( 'should find all "it"-related errors [TypeScript]', ( done ) => {
+	it( 'should find all "it"-related errors (TS)', ( done ) => {
 
 		analyzeFilesForSkippedTests( {
 			log: false,
-			pattern: 'test/examples/it-errors/*.spec.ts'
+			pattern: 'spec/examples/it-errors/*.spec.ts'
 		} ).then( ( results ) => {
 
 			expect( results ).toEqual( [
@@ -60,14 +60,14 @@ describe( 'No Skipped Tests Analyzer', () => {
 					errors: [ // Only one error in file
 						{ char: 2, identifier: 'fit', line: 7 }
 					],
-					filePath: 'test/examples/it-errors/one.spec.ts'
+					filePath: 'spec/examples/it-errors/one.spec.ts'
 				},
 				{
 					errors: [ // Multiple errors in file
 						{ char: 3, identifier: 'xit', line: 17 },
 						{ char: 3, identifier: 'xit', line: 21 }
 					],
-					filePath: 'test/examples/it-errors/two.spec.ts'
+					filePath: 'spec/examples/it-errors/two.spec.ts'
 				}
 			] );
 			done();
@@ -76,11 +76,11 @@ describe( 'No Skipped Tests Analyzer', () => {
 
 	} );
 
-	it( 'should find all "it"-related errors [JavaScript]', ( done ) => {
+	it( 'should find all "it"-related errors (JS)', ( done ) => {
 
 		analyzeFilesForSkippedTests( {
 			log: false,
-			pattern: 'test/examples/it-errors/*.spec.js'
+			pattern: 'spec/examples/it-errors/*.spec.js'
 		} ).then( ( results ) => {
 
 			expect( results ).toEqual( [
@@ -88,14 +88,14 @@ describe( 'No Skipped Tests Analyzer', () => {
 					errors: [ // Only one error in file
 						{ char: 2, identifier: 'fit', line: 7 }
 					],
-					filePath: 'test/examples/it-errors/one.spec.js'
+					filePath: 'spec/examples/it-errors/one.spec.js'
 				},
 				{
 					errors: [ // Multiple errors in file
 						{ char: 3, identifier: 'xit', line: 17 },
 						{ char: 3, identifier: 'xit', line: 21 }
 					],
-					filePath: 'test/examples/it-errors/two.spec.js'
+					filePath: 'spec/examples/it-errors/two.spec.js'
 				}
 			] );
 			done();
@@ -104,11 +104,11 @@ describe( 'No Skipped Tests Analyzer', () => {
 
 	} );
 
-	it( 'should find all "describe"-related errors [TypeScript]', ( done ) => {
+	it( 'should find all "describe"-related errors (TS)', ( done ) => {
 
 		analyzeFilesForSkippedTests( {
 			log: false,
-			pattern: 'test/examples/describe-errors/*.spec.ts'
+			pattern: 'spec/examples/describe-errors/*.spec.ts'
 		} ).then( ( results ) => {
 
 			expect( results ).toEqual( [
@@ -116,13 +116,13 @@ describe( 'No Skipped Tests Analyzer', () => {
 					errors: [ // Top hierarchy
 						{ char: 1, identifier: 'fdescribe', line: 1 }
 					],
-					filePath: 'test/examples/describe-errors/one.spec.ts'
+					filePath: 'spec/examples/describe-errors/one.spec.ts'
 				},
 				{
 					errors: [ // Nested
 						{ char: 2, identifier: 'xdescribe', line: 15 }
 					],
-					filePath: 'test/examples/describe-errors/two.spec.ts'
+					filePath: 'spec/examples/describe-errors/two.spec.ts'
 				}
 			] );
 			done();
@@ -131,11 +131,11 @@ describe( 'No Skipped Tests Analyzer', () => {
 
 	} );
 
-	it( 'should find all "describe"-related errors [JavaScript]', ( done ) => {
+	it( 'should find all "describe"-related errors (JS)', ( done ) => {
 
 		analyzeFilesForSkippedTests( {
 			log: false,
-			pattern: 'test/examples/describe-errors/*.spec.js'
+			pattern: 'spec/examples/describe-errors/*.spec.js'
 		} ).then( ( results ) => {
 
 			expect( results ).toEqual( [
@@ -143,13 +143,13 @@ describe( 'No Skipped Tests Analyzer', () => {
 					errors: [ // Top hierarchy
 						{ char: 1, identifier: 'fdescribe', line: 1 }
 					],
-					filePath: 'test/examples/describe-errors/one.spec.js'
+					filePath: 'spec/examples/describe-errors/one.spec.js'
 				},
 				{
 					errors: [ // Nested
 						{ char: 2, identifier: 'xdescribe', line: 15 }
 					],
-					filePath: 'test/examples/describe-errors/two.spec.js'
+					filePath: 'spec/examples/describe-errors/two.spec.js'
 				}
 			] );
 			done();
@@ -162,7 +162,7 @@ describe( 'No Skipped Tests Analyzer', () => {
 
 		analyzeFilesForSkippedTests( {
 			log: false,
-			pattern: 'test/examples/does-not-exist/*.spec.ts'
+			pattern: 'spec/examples/does-not-exist/*.spec.ts'
 		} ).then( ( results ) => {
 
 			expect( results ).toEqual( [] );

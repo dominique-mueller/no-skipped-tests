@@ -1,5 +1,7 @@
 # Dependencies
 node_modules
 
-# Build
+# Build & Coverage
 dist
+.nyc_output
+coverage
