@@ -19,7 +19,7 @@
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
 		"start": "node bin/no-skipped-tests.js",
-		"test": "nyc --reporter text --reporter html --extension .ts --exclude \"spec/**/*\" --cache false jasmine-ts"
+		"test": "jest --config jest.config.json --runInBand --no-cache"
 	},
 	"dependencies": {
 		"chalk": "2.1.x",
@@ -30,11 +30,10 @@
 		"typescript": ">= 2.4.0"
 	},
 	"devDependencies": {
-		"@types/jasmine": "2.5.x",
+		"@types/jest": "20.0.x",
 		"@types/node": "8.0.x",
-		"jasmine-ts": "0.2.x",
-		"jasmine-spec-reporter": "4.2.x",
-		"nyc": "11.1.x",
+		"jest": "20.0.x",
+		"ts-jest": "20.0.x",
 		"typescript": "2.4.x"
 	}
 }

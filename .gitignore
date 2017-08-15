@@ -3,5 +3,4 @@ node_modules
 
 # Build & Coverage
 dist
-.nyc_output
 coverage
