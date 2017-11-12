@@ -1,4 +1,4 @@
-fdescribe( 'My Fancy Thing', () => { // should ignore fdescribe or xdescribe
+describe( 'My Fancy Thing', () => { // should ignore fdescribe or xdescribe
 
     beforeEach( () => {
         // Implementation

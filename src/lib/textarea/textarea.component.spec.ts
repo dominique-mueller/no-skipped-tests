@@ -14,11 +14,11 @@ describe( 'My Object', () => {
 
     describe( 'My Edge Cases', () => {
 
-        xit( 'should handle this', () => {
+        it( 'should handle this', () => {
             // Implementation
         } );
 
-        xit( 'should handle that', () => {
+        it( 'should handle that', () => {
             // Implementation
         } );
 
