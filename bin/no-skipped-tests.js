@@ -25,10 +25,6 @@ analyzeFilesForSkippedTests( options )
 		}
 	} )
 	.catch( ( error ) => {
-		if ( error ) {
-			console.error( chalk.red( 'AN UNEXPECTED ERROR OCCURED:' ), chalk.white( error.toString() ) );
-		}
 		console.log( '' );
 		process.exit( 1 );
 	} );
-
