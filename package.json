@@ -26,8 +26,7 @@
 		"clean": "rimraf -r dist/*",
 		"release": "automatic-release && copyfiles \"docs/**\" package.json CHANGELOG.md LICENSE README.md dist",
 		"test:coverage": "codecov -f coverage/coverage-final.json",
-		"test": "jest --config jest.config.json --runInBand --no-cache",
-		"temp": "ts-node index.ts"
+		"test": "jest --config jest.config.json --runInBand --no-cache"
 	},
 	"dependencies": {
 		"chalk": "2.3.x",

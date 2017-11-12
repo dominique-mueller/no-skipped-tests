@@ -103,5 +103,3 @@ export async function analyzeFilesForSkippedTests( customOptions: NoSkippedTests
 	return results;
 
 }
-
-analyzeFilesForSkippedTests();

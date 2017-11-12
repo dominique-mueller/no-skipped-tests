@@ -2,7 +2,7 @@
 
 # no-skipped-tests
 
-**Automates the release process for GitHub projects.**
+**Analyzes your project for focused or ignored tests.**
 
 [![npm version](https://img.shields.io/npm/v/no-skipped-tests.svg?maxAge=3600&style=flat)](https://www.npmjs.com/package/no-skipped-tests)
 [![dependency status](https://img.shields.io/david/dominique-mueller/no-skipped-tests.svg?maxAge=3600&style=flat)](https://david-dm.org/dominique-mueller/no-skipped-tests)
@@ -21,7 +21,9 @@ Have you ever committed focused or ignored tests by accident? Do you always forg
 
 The **no-skipped-tests** is here to help; it is a NodeJS-based command line tool which checks your tests for focused or ignored test suites and test cases. Once integrated in your Continuos Integration Platform, we can make sure all the tests are being executed with every build.
 
-TODO: IMAGE
+![No Skipped Tests Success Preview](/docs/preview-success.png?raw=true)
+
+![No Skipped Tests Error Preview](/docs/preview-error.png?raw=true)
 
 <br><br>
 
