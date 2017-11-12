@@ -1,5 +1,9 @@
 {
 	"collectCoverage": true,
+	"collectCoverageFrom" : [
+		"src/**/*.ts",
+		"!src/**/*.interface.ts"
+	],
 	"coverageDirectory": "<rootDir>/coverage",
 	"mapCoverage": true,
 	"moduleFileExtensions": [
