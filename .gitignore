@@ -1,6 +1,18 @@
 # Dependencies
-node_modules
+/node_modules
 
 # Build & Coverage
-dist
-coverage
+/dist
+/coverage
+
+# Development
+/.vscode
+
+# Logs
+*.log
+
+# Other
+*.todo
+*.old
+*.temp
+*.tmp
