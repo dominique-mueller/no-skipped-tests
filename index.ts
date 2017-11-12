@@ -1,4 +1,4 @@
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import * as ora from 'ora';
 
 import { defaultOptions } from './src/constants/default-options';
