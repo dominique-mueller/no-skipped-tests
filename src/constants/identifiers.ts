@@ -1,7 +1,7 @@
 /**
  * List of forbidden identifiers
  */
-export const forbiddenIdentifiers: Array<string> = [ // TODO: Check frameworks!
+export const forbiddenIdentifiers: Array<string> = [
 	'fdescribe',
 	'xdescribe',
 	'fit',
@@ -11,7 +11,7 @@ export const forbiddenIdentifiers: Array<string> = [ // TODO: Check frameworks!
 /**
  * List of identifiers that are the deepest one we are interested in (used for performance enhancements)
  */
-export const deepestIdentifiers: Array<string> = [ // TODO: Check frameworks!
+export const deepestIdentifiers: Array<string> = [
 	'it',
 	'fit',
 	'xit'

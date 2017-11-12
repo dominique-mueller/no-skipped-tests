@@ -5,5 +5,5 @@ import { NoSkippedTestsOptions } from './../interfaces/options.interface';
  */
 export const defaultOptions: NoSkippedTestsOptions = {
 	log: true,
-	pattern: 'src/**/*.spec.ts' // TODO: Include js specs ...
+	pattern: 'src/**/*.spec.(ts|js)'
 };

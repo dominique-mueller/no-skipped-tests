@@ -10,15 +10,11 @@ export function getFilesByPattern( pattern: string ): Promise<Array<string>> {
 	return new Promise<Array<string>>( ( resolve: ( files: Array<string> ) => void, reject: ( error: Error ) => void ) => {
 
 		glob( pattern, ( error, files: Array<string> ) => {
-
-			// Handle errors
 			if ( error ) {
 				reject( error );
 				return;
 			}
-
 			resolve( files );
-
 		} );
 
 	} );

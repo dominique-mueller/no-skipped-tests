@@ -55,49 +55,44 @@ export class NoSkippedTestsAnalyzer {
 	 *
 	 * @returns {Promise<NoSkippedTestsAnalyzerResult>} - Promise, resolves with the results
 	 */
-	public analyze(): Promise<NoSkippedTestsAnalyzerResult> {
-		return new Promise<NoSkippedTestsAnalyzerResult>(
-			async( resolve: ( result: NoSkippedTestsAnalyzerResult ) => void, reject: ( error: Error ) => void ) => {
+	public async analyze(): Promise<NoSkippedTestsAnalyzerResult> {
 
-			// Read file (and catch errors)
-			let data: any;
-			try {
-				data = await this.readFile();
-			} catch( error ) {
-				reject( error );
-				return;
-			};
+		// Read file (and catch errors)
+		let fileContent: string;
+		try {
+			fileContent = await this.readFile();
+		} catch ( error ) {
+			throw new Error( error.message );
+		};
 
-			// Create source file
-			let sourceFile: typescript.SourceFile;
-			try {
-				sourceFile = typescript.createSourceFile( path.basename( this.filePath ), data, typescript.ScriptTarget.Latest, true );
-			} catch ( error ) {
-				reject( error );
-				return;
-			}
+		// Create source file
+		let sourceFile: typescript.SourceFile;
+		try {
+			sourceFile = typescript.createSourceFile( path.basename( this.filePath ), fileContent, typescript.ScriptTarget.Latest, true );
+		} catch ( error ) {
+			throw new Error( error.message );
+		}
 
-			// Run analysis
-			this.analyzeNodeAndChildrenForErrors( sourceFile );
+		// Run analysis
+		this.analyzeNodeAndChildrenForErrors( sourceFile );
 
-			// Enhance error result
-			const errors: Array<NoSkippedTestsAnalyzerError> = [];
-			this.nodesWithForbiddenIdentifier.forEach( ( node: typescript.Node ) => {
-				const lineAndCharacter: typescript.LineAndCharacter = sourceFile.getLineAndCharacterOfPosition( node.getStart() );
-				errors.push( {
-					char: lineAndCharacter.character + 1,
-					identifier: node.getText(),
-					line: lineAndCharacter.line + 1
-				} );
+		// Enhance results
+		const errors: Array<NoSkippedTestsAnalyzerError> = [];
+		this.nodesWithForbiddenIdentifier.forEach( ( node: typescript.Node ): void => {
+			const lineAndCharacter: typescript.LineAndCharacter = sourceFile.getLineAndCharacterOfPosition( node.getStart() );
+			errors.push( {
+				char: lineAndCharacter.character + 1,
+				identifier: node.getText(),
+				line: lineAndCharacter.line + 1
 			} );
-
-			// Return analysis result
-			resolve( {
-				filePath: this.filePath,
-				errors
-			} );
-
 		} );
+
+		// Return analysis result
+		return {
+			filePath: this.filePath,
+			errors
+		};
+
 	}
 
 	/**
@@ -107,7 +102,6 @@ export class NoSkippedTestsAnalyzer {
 	 */
 	private analyzeNodeAndChildrenForErrors( currentNode: typescript.Node ): void {
 
-		// One down
 		this.currentASTDepth++;
 
 		// Reset the depth to skip value if we have left the the defined depth level
@@ -121,21 +115,15 @@ export class NoSkippedTestsAnalyzer {
 			return;
 		}
 
-		// Analyze function / identifier names only
-		if ( currentNode.kind === typescript.SyntaxKind.Identifier ) {
+		// Check if the current node is function and its name is in the list of forbidden ones
+		if ( currentNode.kind === typescript.SyntaxKind.Identifier && forbiddenIdentifiers.indexOf( currentNode.getText() ) !== -1 ) {
 
-			// Check if the function name is in the list of forbidden ones
-			const identifierName: string = currentNode.getText();
-			if ( forbiddenIdentifiers.indexOf( identifierName ) !== -1 ) {
+			// Collect the error node
+			this.nodesWithForbiddenIdentifier.push( currentNode );
 
-				// Collect the error node
-				this.nodesWithForbiddenIdentifier.push( currentNode );
-
-				// Check if we can skip the rest of this depth level (and all its children) (#perfmatters)
-				if ( deepestIdentifiers.indexOf( identifierName ) !== -1 ) {
-					this.currentASTDepthToSkip = this.currentASTDepth;
-				}
-
+			// Check if we can skip the rest of this depth level (and all its children) (#perfmatters)
+			if ( deepestIdentifiers.indexOf( currentNode.getText() ) !== -1 ) {
+				this.currentASTDepthToSkip = this.currentASTDepth;
 			}
 
 		}
@@ -145,7 +133,6 @@ export class NoSkippedTestsAnalyzer {
 			typescript.forEachChild( currentNode, this.analyzeNodeAndChildrenForErrors.bind( this ) ); // Recursion, keeping 'this' reference
 		}
 
-		// One up
 		this.currentASTDepth--;
 
 	}
@@ -153,23 +140,17 @@ export class NoSkippedTestsAnalyzer {
 	/**
 	 * Read the file, resolve with its content
 	 *
-	 * @returns {Promise<any>} - Promise, resolved with the file content
+	 * @returns {Promise<string>} - Promise, resolved with the file content
 	 */
-	private readFile(): Promise<any> {
-		return new Promise<any>( ( resolve: ( data: any ) => void, reject: ( error: Error ) => void ) => {
-
-			fs.readFile( this.filePath, { encoding: 'UTF-8' }, ( error: Error, data: any ) => {
-
-				// Handle errors
+	private readFile(): Promise<string> {
+		return new Promise<string>( ( resolve: ( data: any ) => void, reject: ( error: Error ) => void ): void => {
+			fs.readFile( this.filePath, 'utf-8', ( error: Error, data: string ) => {
 				if ( error ) {
 					reject( error );
 					return;
 				}
-
 				resolve( data );
-
 			} );
-
 		} );
 	}
 
