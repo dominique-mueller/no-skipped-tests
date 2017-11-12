@@ -62,7 +62,7 @@ Alternatively, you can also run it manually:
 npm run pretest
 ```
 
-### Configure test files
+### Configuration
 
 By default, **no-skipped-tests** will analyue all test files within your source folder: `src/**/*.spec.@(ts|js)`. However, your project
 might have a different naming convention or directory structure. Thus, you might provide a custom file pattern instead. For instance:

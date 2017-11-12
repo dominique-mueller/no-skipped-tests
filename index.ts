@@ -94,8 +94,6 @@ export async function analyzeFilesForSkippedTests( customOptions: NoSkippedTests
 				}
 			} );
 
-			console.log( '' );
-
 		}
 
 	}
