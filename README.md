@@ -2,6 +2,8 @@
 
 # no-skipped-tests
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/dominique-mueller/no-skipped-tests.svg)](https://greenkeeper.io/)
+
 **Analyzes your project for focused or ignored tests.**
 
 [![npm version](https://img.shields.io/npm/v/no-skipped-tests.svg?maxAge=3600&style=flat)](https://www.npmjs.com/package/no-skipped-tests)
