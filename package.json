@@ -48,13 +48,13 @@
 		"typescript": "2.6.x"
 	},
 	"devDependencies": {
-		"@types/jest": "21.1.x",
-		"@types/node": "8.0.x",
+		"@types/jest": "~22.0.1",
+		"@types/node": "~9.3.0",
 		"automatic-release": "1.1.x",
 		"codecov": "3.0.x",
 		"copyfiles": "1.2.x",
-		"jest": "21.2.x",
+		"jest": "~22.1.4",
 		"rimraf": "2.6.x",
-		"ts-jest": "21.2.x"
+		"ts-jest": "~22.0.1"
 	}
 }
