@@ -55,6 +55,6 @@
 		"copyfiles": "1.2.x",
 		"jest": "22.3.x",
 		"rimraf": "2.6.x",
-		"ts-jest": "21.2.x"
+		"ts-jest": "22.0.x"
 	}
 }
