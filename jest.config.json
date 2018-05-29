@@ -5,7 +5,6 @@
 		"!src/**/*.interface.ts"
 	],
 	"coverageDirectory": "<rootDir>/coverage",
-	"mapCoverage": true,
 	"moduleFileExtensions": [
 		"js",
 		"ts"
