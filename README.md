@@ -4,12 +4,11 @@
 
 **Analyzes your project for focused or ignored tests.**
 
-[![npm version](https://img.shields.io/npm/v/no-skipped-tests.svg?maxAge=3600&style=flat)](https://www.npmjs.com/package/no-skipped-tests)
-[![dependency status](https://img.shields.io/david/dominique-mueller/no-skipped-tests.svg?maxAge=3600&style=flat)](https://david-dm.org/dominique-mueller/no-skipped-tests)
-[![travis ci build status](https://img.shields.io/travis/dominique-mueller/no-skipped-tests/master.svg?maxAge=3600&style=flat)](https://travis-ci.org/dominique-mueller/no-skipped-tests)
-[![Codecov](https://img.shields.io/codecov/c/github/dominique-mueller/no-skipped-tests.svg?maxAge=3600&style=flat)](https://codecov.io/gh/dominique-mueller/no-skipped-tests)
-[![Known Vulnerabilities](https://snyk.io/test/github/dominique-mueller/no-skipped-tests/badge.svg)](https://snyk.io/test/github/dominique-mueller/no-skipped-tests)
-[![license](https://img.shields.io/npm/l/no-skipped-tests.svg?maxAge=3600&style=flat)](https://github.com/dominique-mueller/no-skipped-tests/LICENSE)
+[![npm version](https://img.shields.io/npm/v/no-skipped-tests?style=flat-square)](https://www.npmjs.com/package/no-skipped-tests)
+[![travis ci build status](https://img.shields.io/travis/dominique-mueller/no-skipped-tests/master?style=flat-square)](https://travis-ci.org/dominique-mueller/no-skipped-tests)
+[![Codecov](https://img.shields.io/codecov/c/github/dominique-mueller/no-skipped-tests/master?style=flat-square)](https://codecov.io/gh/dominique-mueller/no-skipped-tests)
+[![Known Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/dominique-mueller/no-skipped-tests?style=flat-square)](https://snyk.io/test/github/dominique-mueller/no-skipped-tests)
+[![license](https://img.shields.io/github/license/dominique-mueller/no-skipped-tests?flat-square)](https://github.com/dominique-mueller/no-skipped-tests/LICENSE)
 
 </div>
 
@@ -32,23 +31,38 @@ The **no-skipped-tests** is here to help; it is a NodeJS-based command line tool
 You can get **no-skipped-tests** via **npm** by either adding it as a new devDependency to your `package.json` file and running
 `npm install`, or running the following command:
 
-``` bash
+```bash
 npm install no-skipped-tests --save-dev
 ```
 
-### Requirements
+**Requirements**
 
-- **no-skipped-tests** requires at least **NodeJS 7.6** (or higher). *Earlier 7.x versions of NodeJS (7.0 to 7.5) might also work when
-executing **no-skipped-tests** using the `--harmony-async-await` flag.*
+- **no-skipped-tests** requires at least **NodeJS 7.6** (or higher). _Earlier 7.x versions of NodeJS (7.0 to 7.5) might also work when
+  executing **no-skipped-tests** using the `--harmony-async-await` flag._
 
 <br><br>
 
 ## How to use
 
-Using **no-skipped-tests** is very straightforward: Simply call it within one of the scripts of your `package.json` file. For instance, you
-can let it get executed automatically before every test by using the `pretest` script:
+The most common way to use **no-skipped-tests** is adding it to the scripts area within your `package.json` file. For example:
 
-``` json
+```json
+{
+  "scripts": {
+    "no-skipped-tests": "no-skipped-tests"
+  }
+}
+```
+
+Then, execute it by running:
+
+```bash
+npm run no-skipped-tests
+```
+
+You can also let npm run **no-skipped-tests** automatically before every test execution by using the `pretest` script:
+
+```json
 {
   "scripts": {
     "pretest": "no-skipped-tests"
@@ -56,18 +70,20 @@ can let it get executed automatically before every test by using the `pretest` s
 }
 ```
 
-Alternatively, you can also run it manually:
+Alternatively, if you want to run **no-skipped-tests** from scratch, you can use an `npx` command:
 
-``` bash
-npm run pretest
+```bash
+npx no-skipped-tests
 ```
+
+<br>
 
 ### Configuration
 
-By default, **no-skipped-tests** will analyue all test files within your source folder: `src/**/*.spec.@(ts|js)`. However, your project
+By default, **no-skipped-tests** will analyze all test files within your source folder: `src/**/*.spec.@(ts|js)`. However, your project
 might have a different naming convention or directory structure. Thus, you might provide a custom file pattern instead. For instance:
 
-``` json
+```json
 {
   "scripts": {
     "pretest": "no-skipped-tests src/app/**/*.test.ts"
