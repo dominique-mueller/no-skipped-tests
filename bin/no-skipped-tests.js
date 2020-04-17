@@ -4,7 +4,7 @@
 
 const chalk = require( 'chalk' );
 
-const analyzeFilesForSkippedTests = require( './../dist/index' ).analyzeFilesForSkippedTests;
+const analyzeFilesForSkippedTests = require( './../index' ).analyzeFilesForSkippedTests;
 
 // Collect command line parameters (only source pattern for now)
 const parameters = process.argv.slice( 2 );
