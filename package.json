@@ -32,7 +32,7 @@
 	"main": "index.js",
 	"types": "index.d.ts",
 	"bin": {
-		"automatic-release": "bin/no-skipped-tests.js"
+		"no-skipped-tests": "bin/no-skipped-tests.js"
 	},
 	"scripts": {
 		"build": "tsc -p tsconfig.json && copyfiles \"bin/**\" dist",
