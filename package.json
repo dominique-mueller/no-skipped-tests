@@ -48,7 +48,7 @@
 		"typescript": "3.0.x"
 	},
 	"devDependencies": {
-		"@types/jest": "23.1.x",
+		"@types/jest": "26.0.x",
 		"@types/node": "8.10.x",
 		"automatic-release": "1.1.x",
 		"codecov": "3.0.x",
