@@ -4,6 +4,6 @@ import { NoSkippedTestsAnalyzerError } from './no-skipped-tests-analyzer-error.i
  * No skipped tests analyzer result object
  */
 export interface NoSkippedTestsAnalyzerResult {
-	filePath: string;
-	errors: Array<NoSkippedTestsAnalyzerError>;
+  filePath: string;
+  errors: Array<NoSkippedTestsAnalyzerError>;
 }

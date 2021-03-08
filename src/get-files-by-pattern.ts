@@ -6,16 +6,14 @@ import * as glob from 'glob';
  * @param   {string}                 pattern - Glob pattern (see <https://github.com/isaacs/node-glob#glob-primer> for further details)
  * @returns {Promise<Array<string>>}         - Promise, resolves with the list of relative file paths (which can by empty)
  */
-export function getFilesByPattern( pattern: string ): Promise<Array<string>> {
-	return new Promise<Array<string>>( ( resolve: ( files: Array<string> ) => void, reject: ( error: Error ) => void ) => {
-
-		glob( pattern, ( error, files: Array<string> ) => {
-			if ( error ) {
-				reject( error );
-				return;
-			}
-			resolve( files );
-		} );
-
-	} );
+export function getFilesByPattern(pattern: string): Promise<Array<string>> {
+  return new Promise<Array<string>>((resolve: (files: Array<string>) => void, reject: (error: Error) => void) => {
+    glob(pattern, (error, files: Array<string>) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(files);
+    });
+  });
 }

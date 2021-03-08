@@ -2,6 +2,6 @@
  * No Skipped Tests Options
  */
 export interface NoSkippedTestsOptions {
-	pattern?: string;
-	log?: boolean;
+  pattern?: string;
+  log?: boolean;
 }

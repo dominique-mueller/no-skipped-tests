@@ -1,27 +1,21 @@
-describe( 'My Object', () => {
+describe('My Object', () => {
+  describe('My Function Block', () => {
+    it('should do something', () => {
+      // Implementation
+    });
 
-	describe( 'My Function Block', () => {
+    it('should do another thing', () => {
+      // Implementation
+    });
+  });
 
-		it( 'should do something', () => {
-			// Implementation
-		} );
+  describe('My Edge Cases', () => {
+    it('should handle this', () => {
+      // Implementation
+    });
 
-		it( 'should do another thing', () => {
-			// Implementation
-		} );
-
-	} );
-
-	describe( 'My Edge Cases', () => {
-
-		it( 'should handle this', () => {
-			// Implementation
-		} );
-
-		it( 'should handle that', () => {
-			// Implementation
-		} );
-
-	} );
-
-} );
+    it('should handle that', () => {
+      // Implementation
+    });
+  });
+});
