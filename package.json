@@ -40,7 +40,7 @@
     "@types/jest": "23.1.x",
     "@types/node": "8.10.x",
     "automatic-release": "1.1.x",
-    "codecov": "3.0.x",
+    "codecov": "3.7.x",
     "copyfiles": "2.1.x",
     "jest": "23.5.x",
     "rimraf": "2.6.x",
