@@ -2,8 +2,6 @@
 
 'use strict';
 
-const chalk = require( 'chalk' );
-
 const analyzeFilesForSkippedTests = require( './../index' ).analyzeFilesForSkippedTests;
 
 // Collect command line parameters (only source pattern for now)
@@ -18,11 +16,14 @@ console.log( '' );
 analyzeFilesForSkippedTests( options )
 	.then( ( results ) => {
 		console.log( '' );
-		if ( results.length === 0 ) {
-			process.exit( 0 );
-		} else {
-			process.exit( 1 );
-		}
+		const hasErrors = results
+			.map((result) => {
+				return result.errors.length;
+			})
+			.reduce((a, b) => {
+				return a + b;
+			})
+		process.exit( hasErrors ? 1 : 0 );
 	} )
 	.catch( ( error ) => {
 		console.log( '' );
