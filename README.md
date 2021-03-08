@@ -2,13 +2,7 @@
 
 # no-skipped-tests
 
-**Analyzes your project for focused or ignored tests.**
-
-[![npm version](https://img.shields.io/npm/v/no-skipped-tests?style=flat-square)](https://www.npmjs.com/package/no-skipped-tests)
-[![travis ci build status](https://img.shields.io/travis/dominique-mueller/no-skipped-tests/master?style=flat-square)](https://travis-ci.org/dominique-mueller/no-skipped-tests)
-[![Codecov](https://img.shields.io/codecov/c/github/dominique-mueller/no-skipped-tests/master?style=flat-square)](https://codecov.io/gh/dominique-mueller/no-skipped-tests)
-[![Known Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/dominique-mueller/no-skipped-tests?style=flat-square)](https://snyk.io/test/github/dominique-mueller/no-skipped-tests)
-[![license](https://img.shields.io/github/license/dominique-mueller/no-skipped-tests?flat-square)](https://github.com/dominique-mueller/no-skipped-tests/LICENSE)
+**Analyzes your project for focused or ignored tests**
 
 </div>
 
@@ -24,7 +18,7 @@ The **no-skipped-tests** is here to help; it is a NodeJS-based command line tool
 
 ![No Skipped Tests Error Preview](/docs/preview-error.png?raw=true)
 
-<br><br>
+<br><br><br>
 
 ## How to install
 
@@ -37,10 +31,9 @@ npm install no-skipped-tests --save-dev
 
 **Requirements**
 
-- **no-skipped-tests** requires at least **NodeJS 7.6** (or higher). _Earlier 7.x versions of NodeJS (7.0 to 7.5) might also work when
-  executing **no-skipped-tests** using the `--harmony-async-await` flag._
+- **no-skipped-tests** requires **NodeJS 10** (or higher) to be installed
 
-<br><br>
+<br><br><br>
 
 ## How to use
 
@@ -90,13 +83,3 @@ might have a different naming convention or directory structure. Thus, you might
   }
 }
 ```
-
-<br><br>
-
-## Creator
-
-**Dominique Müller**
-
-- E-Mail: **[dominique.m.mueller@gmail.com](mailto:dominique.m.mueller@gmail.com)**
-- Website: **[www.devdom.io](https://www.devdom.io/)**
-- Twitter: **[@itsdevdom](https://twitter.com/itsdevdom)**
