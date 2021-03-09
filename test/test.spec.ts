@@ -55,15 +55,15 @@ describe('No Skipped Tests Analyzer', () => {
       {
         errors: [
           // Only one error in file
-          { char: 2, identifier: 'fit', line: 7 },
+          { char: 3, identifier: 'fit', line: 8 },
         ],
         filePath: 'test/examples/it-errors/one.spec.ts',
       },
       {
         errors: [
           // Multiple errors in file
-          { char: 3, identifier: 'xit', line: 17 },
-          { char: 3, identifier: 'xit', line: 21 },
+          { char: 5, identifier: 'xit', line: 13 },
+          { char: 5, identifier: 'xit', line: 17 },
         ],
         filePath: 'test/examples/it-errors/two.spec.ts',
       },
@@ -79,15 +79,15 @@ describe('No Skipped Tests Analyzer', () => {
       {
         errors: [
           // Only one error in file
-          { char: 2, identifier: 'fit', line: 7 },
+          { char: 3, identifier: 'fit', line: 8 },
         ],
         filePath: 'test/examples/it-errors/one.spec.js',
       },
       {
         errors: [
           // Multiple errors in file
-          { char: 3, identifier: 'xit', line: 17 },
-          { char: 3, identifier: 'xit', line: 21 },
+          { char: 5, identifier: 'xit', line: 13 },
+          { char: 5, identifier: 'xit', line: 17 },
         ],
         filePath: 'test/examples/it-errors/two.spec.js',
       },
@@ -110,7 +110,7 @@ describe('No Skipped Tests Analyzer', () => {
       {
         errors: [
           // Nested
-          { char: 2, identifier: 'xdescribe', line: 15 },
+          { char: 3, identifier: 'xdescribe', line: 12 },
         ],
         filePath: 'test/examples/describe-errors/two.spec.ts',
       },
@@ -133,7 +133,7 @@ describe('No Skipped Tests Analyzer', () => {
       {
         errors: [
           // Nested
-          { char: 2, identifier: 'xdescribe', line: 15 },
+          { char: 3, identifier: 'xdescribe', line: 12 },
         ],
         filePath: 'test/examples/describe-errors/two.spec.js',
       },
