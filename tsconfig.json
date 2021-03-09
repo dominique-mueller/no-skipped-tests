@@ -1,15 +1,13 @@
 {
-	"compilerOptions": {
-		"declaration": true,
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"outDir": "./dist",
-		"preserveConstEnums": true,
-		"removeComments": true,
-		"target": "es2017",
-		"sourceMap": true
-	},
-	"files": [
-		"index.ts"
-	]
+  "compilerOptions": {
+    "declaration": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "target": "es2017",
+    "sourceMap": true
+  },
+  "files": ["index.ts"]
 }

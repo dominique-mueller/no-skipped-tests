@@ -1,18 +1,12 @@
 {
-	"collectCoverage": true,
-	"collectCoverageFrom" : [
-		"src/**/*.ts",
-		"!src/**/*.interface.ts"
-	],
-	"coverageDirectory": "<rootDir>/coverage",
-	"moduleFileExtensions": [
-		"js",
-		"ts"
-	],
-	"rootDir": ".",
-	"transform": {
-		"^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-	},
-	"testRegex": "test.spec.ts",
-	"verbose": true
+  "collectCoverage": true,
+  "collectCoverageFrom": ["src/**/*.ts", "!src/**/*.interface.ts"],
+  "coverageDirectory": "<rootDir>/coverage",
+  "moduleFileExtensions": ["js", "ts"],
+  "rootDir": ".",
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  "testRegex": "test.spec.ts",
+  "verbose": true
 }
