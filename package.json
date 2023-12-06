@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "chalk": "4.1.x",
-    "glob": "7.1.x",
+    "glob": "9.0.0",
     "ora": "5.3.x",
     "typescript": "4.1.x"
   },
